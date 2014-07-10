@@ -1,0 +1,3 @@
+[submodule "fake_s3"]
+	path = fake_s3
+	url = git@github.com:stevenjack/fake-s3.git
