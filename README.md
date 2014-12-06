@@ -5,6 +5,9 @@
 
 This creates a [Docker](http://docker.io) container for running the [fake-s3](https://github.com/jubos/fake-s3) gem.
 
+# Spurious
+
+If you would like to use this gem to fake interaction with S3, you might want to take a look at [spurious](https://www.github.com/stevenjack/spurious) which has support for other fake AWS services wrapped up in a CLI tool. 
 
 ## Installation
 
@@ -16,7 +19,20 @@ the required container for running a fake s3 endpoint within Docker.
 
 The easiest way to use this container is to use the public image from the docker index:
 
-`docker run -d -p 4568:4568 smaj/spurious-s3`
+`docker run -d -p 4569:4569 smaj/spurious-s3 -h {IP_OF_DOCKER_HOST}`
+
+### Hostname
+
+> If you're running the docker client natively on Linux then you can ignore this setup as 'localhost' is infact your machine in this case.
+
+#### Boot2docker
+
+As the gem is running inside a container, the default hostnames it attaches to such as 'localhost' and 's3.localhost' (see https://github.com/jubos/fake-s3/blob/master/lib/fakes3/server.rb#L50) don't have an relevance outside of the container so you need to pass the hostname in when you start the container.
+
+You can use the following command when using boot2docker:
+
+`docker run -d -p 4569:4569 smaj/spurious-s3 -h $(boot2docker ip 2>/dev/null)`
+
 
 This is will damonize the container than expose the endpoint to your local machine (Or VM if you're running on OSX).
 
@@ -25,7 +41,7 @@ This is will damonize the container than expose the endpoint to your local machi
 By default the root is set as `/var/data/fake_s3`, if you'd like to get hold of this just mount it when you run the container:
 
 
-`docker run -d -p 4568:4568 -v /host/dir:/var/data/fake_s3 smaj/spurious-s3`
+`docker run -d -p 4569:4569 -v /host/dir:/var/data/fake_s3 smaj/spurious-s3`
 
 
 
@@ -50,7 +66,3 @@ If you want to add functionality to this project, pull requests are welcome.
 ## Credits
 
  * [@stevenjack85](https://twitter.com/stevenjack85)
-
-Docker nginx is © 2014 BBC News. It is free software and may be redistributed under the terms
-specified in the
-[LICENCE](https://github.com/stevenjack/spurious-s3/tree/master/LICENCE) file.
